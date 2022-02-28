@@ -13,6 +13,8 @@ import { useEffect } from "react";
 import Paragraph from "antd/lib/typography/Paragraph";
 const token = "6b1fab0d-1662-434d-a811-4d80b3d2e6f1";
 import Image from "next/image";
+import Head from "next/head";
+
 
 export default function Reviewer({ userInfo }) {
   console.log(userInfo);
