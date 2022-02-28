@@ -3,8 +3,8 @@ import { Button, Layout, Popover, message, Upload } from "antd";
 import Avatar from "antd/lib/avatar/avatar";
 import { Content, Footer, Header } from "antd/lib/layout/layout";
 import useSWR from "swr";
-import Add from "./Add";
-import TodoList from "./TodoList";
+import Add from './add'
+import TodoList from './todolist'
 import inspirecloud from "../services/inspirecloud";
 import styles from "../styles/Main.module.less";
 import Modal from "antd/lib/modal/Modal";
