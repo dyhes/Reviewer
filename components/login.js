@@ -18,9 +18,7 @@ export default function Login() {
         const { success } = res;
         if (success === true) {
           message.success(`登录成功`)
-          setTimeout(()=>{
-            router.push('/reviewer')
-          },500)
+          location.reload()
         } else {
           message.error('验证码错误');
         }
