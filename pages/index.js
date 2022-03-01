@@ -13,7 +13,8 @@ export default function Home() {
   const { data, error } = useSWR("getUserInfo", (name) =>
     inspirecloud.run(name)
   );
-  if (error)
+  if (error){
+    console.log(error)
     return (
       <Result
         status="500"
@@ -32,6 +33,7 @@ export default function Home() {
         }
       />
     );
+  }
   if (!data) return <Skeleton active />;
   const success = data.success;
   if (success) return <Reviewer userInfo={data.user} />;

@@ -1,13 +1,12 @@
 import { AntDesignOutlined, UploadOutlined } from "@ant-design/icons/lib/icons";
-import { Button, Layout, Popover, message, Upload } from "antd";
+import { Button, Layout, Popover, message, Upload, Switch, Modal } from "antd";
 import Avatar from "antd/lib/avatar/avatar";
 import { Content, Footer, Header } from "antd/lib/layout/layout";
 import useSWR from "swr";
-import Add from './add'
-import TodoList from './todolist'
+import Add from "./add";
+import TodoList from "./todolist";
 import inspirecloud from "../services/inspirecloud";
 import styles from "../styles/Main.module.less";
-import Modal from "antd/lib/modal/Modal";
 import { useState } from "react";
 import { useEffect } from "react";
 import Paragraph from "antd/lib/typography/Paragraph";
@@ -15,16 +14,20 @@ const token = "6b1fab0d-1662-434d-a811-4d80b3d2e6f1";
 import Image from "next/image";
 import Head from "next/head";
 
-
 export default function Reviewer({ userInfo }) {
   console.log(userInfo);
   const [logoutVisible, setLogoutVisible] = useState(false);
   const [changeVisible, setChangeVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [email, setEmail] = useState(userInfo.email);
+  const [intro, setIntro] = useState(userInfo.intro);
   const [avatar, setAvatar] = useState(userInfo.avatar);
   const [nickname, setNickname] = useState(
     userInfo.nickname === "" ? `用户${userInfo.phoneNumber}` : userInfo.nickname
   );
+
+  const [hint, setHint] = useState(false);
+
   const handleLogout = () => {
     setConfirmLoading(true);
     inspirecloud.run("logout").then((success) => {
@@ -41,6 +44,7 @@ export default function Reviewer({ userInfo }) {
     if (!isLt10M) message.error("图片必须小于10MB");
     return isJpgOrPng && isLt10M;
   };
+
   useEffect(() => {
     if (nickname !== userInfo.nickname) {
       inspirecloud.run("updateUserInfo", { nickname: nickname }).then((res) => {
@@ -49,6 +53,7 @@ export default function Reviewer({ userInfo }) {
       });
     }
   }, [nickname]);
+
   useEffect(() => {
     if (avatar !== userInfo.avatar) {
       inspirecloud.run("updateUserInfo", { avatar: avatar }).then((res) => {
@@ -57,6 +62,45 @@ export default function Reviewer({ userInfo }) {
       });
     }
   }, [avatar]);
+
+  useEffect(() => {
+    if (email !== userInfo.email) {
+      inspirecloud.run("updateUserInfo", { email: email}).then((res) => {
+        if (res.success) {
+          message.success("邮箱修改成功");
+          message.success("请保证邮箱正确，否则将影响推送");
+          if(intro==null){
+            inspirecloud.run('updateUserInfo',{intro:intro})
+            setIntro(false)
+          }
+        } else message.error("邮箱修改失败，请重试");
+      });
+    }
+  }, [email]);
+
+  useEffect(() => {
+    if (intro !== userInfo.intro) {
+      inspirecloud.run("updateUserInfo", { intro: intro }).then((res) => {
+        if (res.success) {
+          if(intro)message.success("已允许推送");
+          else message.success("已禁止推送");
+        } else message.error("推送状态修改失败，请重试");
+      });
+    }
+  }, [intro]);
+
+  useEffect(() => {
+    if (
+      userInfo.nickname == null ||
+      userInfo.avatar == null ||
+      userInfo.intro == null
+    ) {
+      Modal.info({
+        title: "请完善个人资料"
+      });
+    }
+  }, []);
+
   const handleUpload = (info) => {
     const file = info.file;
     const filename = file.name;
@@ -65,6 +109,16 @@ export default function Reviewer({ userInfo }) {
       .then((data) => setAvatar(data.url))
       .catch((error) => message.error("上传失败，请重试"));
   };
+
+  const switcher =
+    intro ==null ? (
+      <Popover trigger="hover" placement="bottom" content={<p>请首先设置个人邮箱</p>}>
+        <Switch disabled={true} />
+      </Popover>
+    ) : (
+      <Switch defaultChecked={intro} onChange={() => setIntro(!intro)} />
+    );
+
   return (
     <div className={styles["container"]}>
       <Head>
@@ -112,6 +166,12 @@ export default function Reviewer({ userInfo }) {
                     <Paragraph editable={{ onChange: setNickname }}>
                       {nickname}
                     </Paragraph>
+                    <p>修改邮箱</p>
+                    <Paragraph editable={{ onChange: setEmail }}>
+                      {email}
+                    </Paragraph>
+                    <p>是否允许Reviewer通过邮箱推送任务提醒</p>
+                    {switcher}
                   </div>
                 </Modal>
                 <p

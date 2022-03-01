@@ -72,6 +72,9 @@ export default function Login() {
           ]}
         >
           <Input
+          wrapperCol={{
+            span:16
+          }}
             prefix={<PhoneOutlined className="site-form-item-icon" />}
             ref={phoneref}
           />
@@ -92,7 +95,7 @@ export default function Login() {
 
         <Form.Item
           wrapperCol={{
-            offset: 8,
+            offset:7,
             span: 16,
           }}
         >
@@ -125,6 +128,7 @@ export default function Login() {
             登录
           </Button>
         </Form.Item>
+        <p style={{color:'gray'}}>未注册的手机号验证通过后将自动注册</p>
       </Form>
     </div>
   );
