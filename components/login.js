@@ -1,12 +1,12 @@
 import { MessageOutlined, PhoneOutlined } from "@ant-design/icons/lib/icons";
-import { Form, Input, Checkbox, Button, FormItem, message } from "antd";
-import { useRouter } from "next/router";
-import { useRef } from "react";
+import { Form, Input, Button, message } from "antd";
+import { useRef,useState,useEffect} from "react";
 import inspirecloud from "../services/inspirecloud";
 import styles from "../styles/Login.module.less";
 export default function Login() {
+  const [coolingDown, setCoolingDown] = useState(false)
+  const [countDown, setCountDown] = useState(60)
   const phoneref = useRef();
-  const router=useRouter();
   const onFinish = (value) => {
     const { phonenumber, code } = value;
     return inspirecloud
@@ -24,9 +24,34 @@ export default function Login() {
         }
       });
   };
+
+  useEffect(()=>{
+    if(countDown===0)setCoolingDown(false)
+    if(coolingDown)setTimeout(()=>setCountDown(countDown-1),1000)
+  },[countDown])
+
+
+  useEffect(()=>{
+    setCountDown(60)
+    if(coolingDown)setTimeout(()=>setCountDown(countDown-1),1000)
+  },[coolingDown])
+
+  const getMessage = function (phoneNum) {
+    if (phoneNum.length !== 11) {
+      message.error('请输入正确格式手机号');
+    } else {
+      return inspirecloud
+        .run("SendMessage", {
+          phoneNumber: phoneNum,
+        })
+        .then((res) => {
+          message.success('发送成功')
+          setCoolingDown(true)
+        });
+    }
+  };
   return (
     <div>
-      <div id=""></div>
       <Form
         labelCol={{
           span: 8,
@@ -71,7 +96,13 @@ export default function Login() {
             span: 16,
           }}
         >
-          <Button
+         {
+           coolingDown?(
+             <Button type="default" disabled>
+               {countDown} s 后可重试
+             </Button>
+           ):(
+            <Button
             type="default"
             onClick={(e) => {
               e.preventDefault();
@@ -80,6 +111,8 @@ export default function Login() {
           >
             获取验证码
           </Button>
+           )
+         }
         </Form.Item>
 
         <Form.Item
@@ -96,15 +129,3 @@ export default function Login() {
     </div>
   );
 }
-
-const getMessage = function (phoneNum) {
-  if (phoneNum.length !== 11) {
-    message.error('请输入正确格式手机号');
-  } else {
-    return inspirecloud
-      .run("SendMessage", {
-        phoneNumber: phoneNum,
-      })
-      .then((res) => {message.success('发送成功')});
-  }
-};
