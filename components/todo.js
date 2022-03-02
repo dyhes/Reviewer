@@ -24,9 +24,9 @@ export default function Todo({todo,handleCount}){
                 <Card title={<div className={styles['todo']}>
                   {todo.task}
                   <Button type="primary" onClick={handleClick}>完成</Button>
-                </div>} style={{ width: 300 }}>
+                </div>} style={{ width:300}}>
                 <p>备注：{todo.remark.length===0?'无':todo.remark}</p>
-                <p>链接：{todo.link.length===0?'无':<a>{todo.link}</a>}</p>
+                <p>链接：{todo.link.length===0?'无':<a href={todo.link} target='_blank'>{todo.task}</a>}</p>
               </Card>
               </List.Item>:<></>}</>
     )
