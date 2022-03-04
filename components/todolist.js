@@ -6,7 +6,7 @@ import styles from "../styles/todo.module.less";
 import Todo from "./todo";
 import inspirecloud from '../services/inspirecloud'
 const now=new Date()
-const todayString=now.getFullYear()+'-'+(now.getMonth()<9?'0':'')+(now.getMonth()+1)+'-'+now.getDate()
+const todayString=now.getFullYear()+'-'+(now.getMonth()<9?'0':'')+(now.getMonth()+1)+'-'+(now.getDate()<10?'0':'')+now.getDate()
 const curMom=moment(now, "YYYY/MM/DD")
 export default function TodoList() {
   const [date, setDate] = useState(todayString)
@@ -43,6 +43,7 @@ export default function TodoList() {
     />
   );
   const todos = data.result;
+  console.log(todos);
   return (
     <div className={styles["list"]}>
       <DatePicker
