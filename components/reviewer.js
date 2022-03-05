@@ -92,7 +92,7 @@ export default function Reviewer({ userInfo }) {
     if (
       first==null
     ) {
-      //inspirecloud.run('updateUserInfo',{first:false})
+      inspirecloud.run('updateUserInfo',{first:false})
       Modal.info({
         title: "初次使用指引",
         content:<div>
