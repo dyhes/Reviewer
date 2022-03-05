@@ -64,7 +64,7 @@ export default function Home() {
               </p>
             </div>
           </Content>
-          <Footer style={{ textAlign: "center" }}>
+          <Footer style={{ textAlign: "center",width:'100vw' }}>
             Reviewer ©2022 Created by dyhes
           </Footer>
         </Layout>

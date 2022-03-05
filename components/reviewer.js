@@ -134,6 +134,7 @@ export default function Reviewer({ userInfo }) {
             placement="bottom"
             content={
               <div className={styles["center"]}>
+                <p onClick={()=>Modal.info({title:'使用帮助',content:<div><p>新添加的任务会在1天，1周，1月后出现在您的复习列表中</p></div>})}>使用帮助</p>
                 <p
                   onClick={() => setChangeVisible(true)}
                   className={styles["hovered"]}
