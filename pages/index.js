@@ -17,6 +17,7 @@ export default function Home() {
     console.log(error)
     return (
       <Result
+      className={styles['container']}
         status="500"
         title="500"
         subTitle="Sorry, something went wrong."
@@ -36,7 +37,7 @@ export default function Home() {
   }
   if (!data) return <Skeleton active />;
   const success = data.success;
-  if (success) return <Reviewer userInfo={data.user} />;
+  if (success) return <Reviewer className={styles['container']} userInfo={data.user} />;
   else
     return (
       <div className={styles["container"]}>

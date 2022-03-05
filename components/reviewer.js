@@ -25,8 +25,7 @@ export default function Reviewer({ userInfo }) {
   const [nickname, setNickname] = useState(
     userInfo.nickname === "" ? `用户${userInfo.phoneNumber}` : userInfo.nickname
   );
-
-  const [hint, setHint] = useState(false);
+  const [first, setFirst] = useState(userInfo.first)
 
   const handleLogout = () => {
     setConfirmLoading(true);
@@ -91,12 +90,15 @@ export default function Reviewer({ userInfo }) {
 
   useEffect(() => {
     if (
-      userInfo.nickname == null ||
-      userInfo.avatar == null ||
-      userInfo.intro == null
+      first==null
     ) {
+      //inspirecloud.run('updateUserInfo',{first:false})
       Modal.info({
-        title: "请完善个人资料"
+        title: "初次使用指引",
+        content:<div className={styles['center']}>
+          <p>新添加的任务会在1天，1周，1月后出现在您的复习列表中</p>
+          <p>现在请您完善初始资料</p>
+        </div>
       });
     }
   }, []);
