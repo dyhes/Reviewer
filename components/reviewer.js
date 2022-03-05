@@ -95,9 +95,9 @@ export default function Reviewer({ userInfo }) {
       //inspirecloud.run('updateUserInfo',{first:false})
       Modal.info({
         title: "初次使用指引",
-        content:<div className={styles['center']}>
+        content:<div>
           <p>新添加的任务会在1天，1周，1月后出现在您的复习列表中</p>
-          <p>现在请您完善初始资料</p>
+          <p>现在请您完善初始资料,并决定是否允许Reviewer通过邮箱向您推送复习提示</p>
         </div>
       });
     }
